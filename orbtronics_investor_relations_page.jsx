@@ -21,8 +21,8 @@ import {
   Building2,
   Search,
   ChevronRight,
-  ChartColumn,
-  BadgeDollarSign,
+  BarChart2,
+  DollarSign,
   BookOpen,
   Download,
   Filter,
@@ -303,7 +303,7 @@ export default function OrbtronicsInvestorRelationsPage() {
             title="Net income growth"
             value={`${netIncomeGrowth?.toFixed(1)}%`}
             subtext="FY2025 vs FY2024"
-            icon={BadgeDollarSign}
+            icon={DollarSign}
           />
           <StatCard
             title="Cash balance"
@@ -332,7 +332,7 @@ export default function OrbtronicsInvestorRelationsPage() {
             <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
               <Card className="rounded-3xl border-slate-200 shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-xl"><ChartColumn className="h-5 w-5" /> Revenue, net income, and cash</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-xl"><BarChart2 className="h-5 w-5" /> Revenue, net income, and cash</CardTitle>
                 </CardHeader>
                 <CardContent className="h-[380px] p-6 pt-0">
                   <ResponsiveContainer width="100%" height="100%">
