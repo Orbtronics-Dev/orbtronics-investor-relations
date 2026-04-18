@@ -528,7 +528,7 @@ export default function OrbtronicsInvestorRelationsPage() {
                 <div>
                   <p className="text-lg font-semibold">Interested in investing?</p>
                   <p className="mt-1 text-sm text-slate-600">
-                    Expand this page with governance documents, cap table materials, KPI disclosures, and segmented business reporting.
+                    Join us in accelerating the creation and adoption of technology in emerging markets.
                   </p>
                 </div>
                 <Button className="rounded-2xl">
