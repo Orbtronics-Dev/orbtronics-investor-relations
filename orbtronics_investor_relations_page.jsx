@@ -17,7 +17,6 @@ import {
 import {
   FileText,
   TrendingUp,
-  Wallet,
   Building2,
   Search,
   ChevronRight,
@@ -43,7 +42,6 @@ const financialData = [
     assets: 33441,
     liabilities: 5616,
     equity: 27825,
-    cash: 21447,
   },
   {
     period: "2023",
@@ -53,7 +51,6 @@ const financialData = [
     assets: 162594,
     liabilities: 44902,
     equity: 117692,
-    cash: 99963,
   },
   {
     period: "2024",
@@ -63,7 +60,6 @@ const financialData = [
     assets: 381436,
     liabilities: 180609,
     equity: 200827,
-    cash: 338191,
   },
   {
     period: "2025",
@@ -73,7 +69,6 @@ const financialData = [
     assets: 673953,
     liabilities: 271553,
     equity: 402400,
-    cash: 477732,
   },
 ];
 
@@ -273,14 +268,10 @@ export default function OrbtronicsInvestorRelationsPage() {
                     <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.netIncome, "XCD")}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 p-4">
-                    <p className="text-xs uppercase tracking-wide text-slate-500">Cash</p>
-                    <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.cash, "XCD")}</p>
-                  </div>
-                  <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Assets</p>
                     <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.assets, "XCD")}</p>
                   </div>
-                  <div className="rounded-2xl bg-slate-50 p-4">
+                  <div className="rounded-2xl bg-slate-50 p-4 col-span-2">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Equity</p>
                     <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.equity, "XCD")}</p>
                   </div>
@@ -306,12 +297,6 @@ export default function OrbtronicsInvestorRelationsPage() {
             icon={DollarSign}
           />
           <StatCard
-            title="Cash balance"
-            value={formatCurrency(latestFinancial.cash, "XCD")}
-            subtext="Audited FY2025"
-            icon={Wallet}
-          />
-          <StatCard
             title="Latest valuation"
             value={formatCurrency(latestValuation.valuation, latestValuation.currency)}
             subtext={valuationGrowth ? `${valuationGrowth.toFixed(1)}% vs prior report` : latestValuation.methodology}
@@ -332,7 +317,7 @@ export default function OrbtronicsInvestorRelationsPage() {
             <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
               <Card className="rounded-3xl border-slate-200 shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-xl"><BarChart2 className="h-5 w-5" /> Revenue, net income, and cash</CardTitle>
+                  <CardTitle className="flex items-center gap-2 text-xl"><BarChart2 className="h-5 w-5" /> Revenue and net income</CardTitle>
                 </CardHeader>
                 <CardContent className="h-[380px] p-6 pt-0">
                   <ResponsiveContainer width="100%" height="100%">
@@ -344,7 +329,6 @@ export default function OrbtronicsInvestorRelationsPage() {
                       <Legend />
                       <Line type="monotone" dataKey="revenue" strokeWidth={3} name="Revenue" />
                       <Line type="monotone" dataKey="netIncome" strokeWidth={3} name="Net income" />
-                      <Line type="monotone" dataKey="cash" strokeWidth={3} name="Cash" />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -385,7 +369,6 @@ export default function OrbtronicsInvestorRelationsPage() {
                     <div className="mt-4 space-y-2 text-sm text-slate-600">
                       <div className="flex justify-between gap-4"><span>Revenue</span><span className="font-medium text-slate-900">{formatCurrency(item.revenue, "XCD")}</span></div>
                       <div className="flex justify-between gap-4"><span>Net income</span><span className="font-medium text-slate-900">{formatCurrency(item.netIncome, "XCD")}</span></div>
-                      <div className="flex justify-between gap-4"><span>Cash</span><span className="font-medium text-slate-900">{formatCurrency(item.cash, "XCD")}</span></div>
                       <div className="flex justify-between gap-4"><span>Assets</span><span className="font-medium text-slate-900">{formatCurrency(item.assets, "XCD")}</span></div>
                       <div className="flex justify-between gap-4"><span>Equity</span><span className="font-medium text-slate-900">{formatCurrency(item.equity, "XCD")}</span></div>
                     </div>
@@ -523,21 +506,22 @@ export default function OrbtronicsInvestorRelationsPage() {
               ))}
             </div>
 
-            <Card className="rounded-3xl border-slate-200 shadow-sm">
-              <CardContent className="flex flex-col items-start justify-between gap-4 p-6 md:flex-row md:items-center">
-                <div>
-                  <p className="text-lg font-semibold">Interested in investing?</p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    Join us in accelerating the creation and adoption of technology in emerging markets.
-                  </p>
-                </div>
-                <Button className="rounded-2xl">
-                  Contact investor relations <ChevronRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardContent>
-            </Card>
           </TabsContent>
         </Tabs>
+
+        <Card className="mt-6 rounded-3xl border-slate-200 shadow-sm">
+          <CardContent className="flex flex-col items-start justify-between gap-4 p-6 md:flex-row md:items-center">
+            <div>
+              <p className="text-lg font-semibold">Interested in investing?</p>
+              <p className="mt-1 text-sm text-slate-600">
+                Join us in accelerating the creation and adoption of technology in emerging markets.
+              </p>
+            </div>
+            <Button className="rounded-2xl">
+              Contact investor relations <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );
