@@ -202,6 +202,15 @@ const StatCard = ({ title, value, subtext, icon: Icon }) => (
 export default function OrbtronicsInvestorRelationsPage() {
   const [documentQuery, setDocumentQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [displayCurrency, setDisplayCurrency] = useState("USD");
+
+  const XCD_TO_USD = 1 / 2.7;
+  const convertToDisplay = (value, sourceCurrency = "XCD") => {
+    if (displayCurrency === sourceCurrency) return value;
+    return sourceCurrency === "XCD" ? value * XCD_TO_USD : value / XCD_TO_USD;
+  };
+  const fmt = (value, sourceCurrency = "XCD") =>
+    formatCurrency(convertToDisplay(value, sourceCurrency), displayCurrency);
 
   const latestFinancial = financialData[financialData.length - 1];
   const previousFinancial = financialData[financialData.length - 2];
@@ -228,6 +237,21 @@ export default function OrbtronicsInvestorRelationsPage() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+          <div className="flex justify-end mb-4">
+            <div className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1">
+              {["USD", "XCD"].map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setDisplayCurrency(c)}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                    displayCurrency === c ? "bg-slate-900 text-white" : "text-slate-500 hover:text-slate-900"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -260,20 +284,20 @@ export default function OrbtronicsInvestorRelationsPage() {
               <CardContent className="grid gap-5 p-6 pt-0">
                 <div>
                   <p className="text-sm text-slate-500">FY2025 revenue</p>
-                  <p className="mt-1 text-3xl font-semibold">{formatCurrency(latestFinancial.revenue, "XCD")}</p>
+                  <p className="mt-1 text-3xl font-semibold">{fmt(latestFinancial.revenue)}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Net income</p>
-                    <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.netIncome, "XCD")}</p>
+                    <p className="mt-1 text-xl font-semibold">{fmt(latestFinancial.netIncome)}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 p-4">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Assets</p>
-                    <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.assets, "XCD")}</p>
+                    <p className="mt-1 text-xl font-semibold">{fmt(latestFinancial.assets)}</p>
                   </div>
                   <div className="rounded-2xl bg-slate-50 p-4 col-span-2">
                     <p className="text-xs uppercase tracking-wide text-slate-500">Equity</p>
-                    <p className="mt-1 text-xl font-semibold">{formatCurrency(latestFinancial.equity, "XCD")}</p>
+                    <p className="mt-1 text-xl font-semibold">{fmt(latestFinancial.equity)}</p>
                   </div>
                 </div>
               </CardContent>
@@ -298,7 +322,7 @@ export default function OrbtronicsInvestorRelationsPage() {
           />
           <StatCard
             title="Latest valuation"
-            value={formatCurrency(latestValuation.valuation, latestValuation.currency)}
+            value={fmt(latestValuation.valuation, latestValuation.currency)}
             subtext={valuationGrowth ? `${valuationGrowth.toFixed(1)}% vs prior report` : latestValuation.methodology}
             icon={Building2}
           />
@@ -325,7 +349,7 @@ export default function OrbtronicsInvestorRelationsPage() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="period" />
                       <YAxis />
-                      <Tooltip formatter={(value) => formatCurrency(Number(value), "XCD")} />
+                      <Tooltip formatter={(value) => fmt(Number(value))} />
                       <Legend />
                       <Line type="monotone" dataKey="revenue" strokeWidth={3} name="Revenue" />
                       <Line type="monotone" dataKey="netIncome" strokeWidth={3} name="Net income" />
@@ -344,7 +368,7 @@ export default function OrbtronicsInvestorRelationsPage() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="period" />
                       <YAxis />
-                      <Tooltip formatter={(value) => formatCurrency(Number(value), "XCD")} />
+                      <Tooltip formatter={(value) => fmt(Number(value))} />
                       <Legend />
                       <Bar dataKey="assets" name="Assets" radius={[8, 8, 0, 0]} />
                       <Bar dataKey="liabilities" name="Liabilities" radius={[8, 8, 0, 0]} />
@@ -367,10 +391,10 @@ export default function OrbtronicsInvestorRelationsPage() {
                       <Badge variant="secondary" className="rounded-full">{item.basis}</Badge>
                     </div>
                     <div className="mt-4 space-y-2 text-sm text-slate-600">
-                      <div className="flex justify-between gap-4"><span>Revenue</span><span className="font-medium text-slate-900">{formatCurrency(item.revenue, "XCD")}</span></div>
-                      <div className="flex justify-between gap-4"><span>Net income</span><span className="font-medium text-slate-900">{formatCurrency(item.netIncome, "XCD")}</span></div>
-                      <div className="flex justify-between gap-4"><span>Assets</span><span className="font-medium text-slate-900">{formatCurrency(item.assets, "XCD")}</span></div>
-                      <div className="flex justify-between gap-4"><span>Equity</span><span className="font-medium text-slate-900">{formatCurrency(item.equity, "XCD")}</span></div>
+                      <div className="flex justify-between gap-4"><span>Revenue</span><span className="font-medium text-slate-900">{fmt(item.revenue)}</span></div>
+                      <div className="flex justify-between gap-4"><span>Net income</span><span className="font-medium text-slate-900">{fmt(item.netIncome)}</span></div>
+                      <div className="flex justify-between gap-4"><span>Assets</span><span className="font-medium text-slate-900">{fmt(item.assets)}</span></div>
+                      <div className="flex justify-between gap-4"><span>Equity</span><span className="font-medium text-slate-900">{fmt(item.equity)}</span></div>
                     </div>
                   </div>
                 ))}
@@ -390,7 +414,7 @@ export default function OrbtronicsInvestorRelationsPage() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="year" />
                       <YAxis />
-                      <Tooltip formatter={(value, _name, props) => formatCurrency(Number(value), props?.payload?.currency || "XCD")} />
+                      <Tooltip formatter={(value, _name, props) => fmt(Number(value), props?.payload?.currency || "XCD")} />
                       <Area type="monotone" dataKey="valuation" strokeWidth={3} fillOpacity={0.2} name="Valuation" />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -404,16 +428,16 @@ export default function OrbtronicsInvestorRelationsPage() {
                 <CardContent className="space-y-5 p-6 pt-0">
                   <div className="rounded-2xl bg-slate-50 p-5">
                     <p className="text-sm text-slate-500">Central value</p>
-                    <p className="mt-1 text-3xl font-semibold">{formatCurrency(latestValuation.valuation, latestValuation.currency)}</p>
+                    <p className="mt-1 text-3xl font-semibold">{fmt(latestValuation.valuation, latestValuation.currency)}</p>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="rounded-2xl border border-slate-200 p-5">
                       <p className="text-sm text-slate-500">Low bound</p>
-                      <p className="mt-1 text-2xl font-semibold">{formatCurrency(latestValuation.low, latestValuation.currency)}</p>
+                      <p className="mt-1 text-2xl font-semibold">{fmt(latestValuation.low, latestValuation.currency)}</p>
                     </div>
                     <div className="rounded-2xl border border-slate-200 p-5">
                       <p className="text-sm text-slate-500">High bound</p>
-                      <p className="mt-1 text-2xl font-semibold">{formatCurrency(latestValuation.high, latestValuation.currency)}</p>
+                      <p className="mt-1 text-2xl font-semibold">{fmt(latestValuation.high, latestValuation.currency)}</p>
                     </div>
                   </div>
                   <div className="rounded-2xl border border-dashed border-slate-300 p-5 text-sm text-slate-600">
@@ -429,7 +453,7 @@ export default function OrbtronicsInvestorRelationsPage() {
                 <Card key={item.year} className="rounded-3xl border-slate-200 shadow-sm">
                   <CardContent className="p-6">
                     <p className="text-sm text-slate-500">{item.label}</p>
-                    <p className="mt-2 text-3xl font-semibold">{formatCurrency(item.valuation, item.currency)}</p>
+                    <p className="mt-2 text-3xl font-semibold">{fmt(item.valuation, item.currency)}</p>
                     <p className="mt-2 text-sm text-slate-600">{item.methodology}</p>
                   </CardContent>
                 </Card>
