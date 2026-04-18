@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   AreaChart,
   Area,
@@ -165,6 +165,105 @@ const documents = [
   },
 ];
 
+const ROCKET_STARS = [
+  { top: "4%",  left: "6%",  size: 2,   maxOpacity: 0.55, duration: 3.2, delay: 0 },
+  { top: "9%",  left: "83%", size: 2.5, maxOpacity: 0.6,  duration: 2.5, delay: 0.5 },
+  { top: "15%", left: "55%", size: 1.5, maxOpacity: 0.45, duration: 4,   delay: 1 },
+  { top: "22%", left: "27%", size: 2,   maxOpacity: 0.5,  duration: 3.5, delay: 0.3 },
+  { top: "30%", left: "91%", size: 3,   maxOpacity: 0.4,  duration: 2,   delay: 0.8 },
+  { top: "37%", left: "13%", size: 1.5, maxOpacity: 0.6,  duration: 4.5, delay: 0.2 },
+  { top: "44%", left: "68%", size: 2,   maxOpacity: 0.45, duration: 3,   delay: 1.2 },
+  { top: "51%", left: "41%", size: 2.5, maxOpacity: 0.5,  duration: 2.8, delay: 0.6 },
+  { top: "58%", left: "79%", size: 1.5, maxOpacity: 0.4,  duration: 3.2, delay: 0.4 },
+  { top: "64%", left: "21%", size: 2,   maxOpacity: 0.55, duration: 2.5, delay: 0.9 },
+  { top: "71%", left: "89%", size: 3,   maxOpacity: 0.45, duration: 3.8, delay: 0.1 },
+  { top: "78%", left: "50%", size: 1.5, maxOpacity: 0.5,  duration: 4,   delay: 0.7 },
+  { top: "84%", left: "11%", size: 2,   maxOpacity: 0.4,  duration: 3,   delay: 0.3 },
+  { top: "90%", left: "63%", size: 2.5, maxOpacity: 0.55, duration: 2.2, delay: 1.1 },
+  { top: "96%", left: "34%", size: 1.5, maxOpacity: 0.45, duration: 3.5, delay: 0.5 },
+  { top: "11%", left: "44%", size: 2,   maxOpacity: 0.5,  duration: 4.2, delay: 0.8 },
+  { top: "47%", left: "96%", size: 1.5, maxOpacity: 0.4,  duration: 3,   delay: 0.2 },
+  { top: "63%", left: "4%",  size: 2.5, maxOpacity: 0.55, duration: 2.7, delay: 1.3 },
+  { top: "75%", left: "73%", size: 2,   maxOpacity: 0.45, duration: 3.5, delay: 0.6 },
+  { top: "87%", left: "42%", size: 3,   maxOpacity: 0.5,  duration: 2.3, delay: 0.4 },
+];
+
+const RocketBackground = () => {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["92vh", "-130vh"]);
+
+  return (
+    <div className="pointer-events-none fixed inset-0 overflow-hidden" style={{ zIndex: 1 }}>
+      {ROCKET_STARS.map((star, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-slate-400"
+          style={{ top: star.top, left: star.left, width: star.size, height: star.size }}
+          animate={{ opacity: [0.05, star.maxOpacity, 0.05] }}
+          transition={{ repeat: Infinity, duration: star.duration, delay: star.delay, ease: "easeInOut" }}
+        />
+      ))}
+
+      <motion.div style={{ y, right: "4%", position: "absolute" }}>
+        {/* Rocket body */}
+        <svg width="52" height="116" viewBox="0 0 52 116" fill="none" style={{ opacity: 0.22 }}>
+          <path d="M26 2 L10 36 L42 36 Z" fill="#0f172a" />
+          <rect x="10" y="34" width="32" height="56" rx="4" fill="#1e293b" />
+          <rect x="10" y="54" width="32" height="7" fill="#dc2626" opacity="0.85" />
+          <circle cx="26" cy="46" r="7" fill="#0ea5e9" opacity="0.75" />
+          <circle cx="26" cy="46" r="4.5" fill="#bae6fd" opacity="0.55" />
+          <path d="M10 74 L1 98 L10 92 Z" fill="#0f172a" />
+          <path d="M42 74 L51 98 L42 92 Z" fill="#0f172a" />
+          <rect x="18" y="88" width="16" height="10" rx="3" fill="#334155" />
+        </svg>
+
+        {/* Animated flame */}
+        <motion.div
+          style={{ position: "absolute", bottom: -32, left: "50%", x: "-50%", transformOrigin: "top center" }}
+          animate={{
+            scaleY: [1, 1.5, 0.8, 1.4, 0.9, 1],
+            scaleX: [1, 0.88, 1.12, 0.92, 1.08, 1],
+          }}
+          transition={{ repeat: Infinity, duration: 0.18, ease: "easeInOut" }}
+        >
+          <svg width="26" height="52" viewBox="0 0 26 52" fill="none" style={{ opacity: 0.85 }}>
+            <defs>
+              <linearGradient id="rkt-flame-outer" x1="13" y1="0" x2="13" y2="52" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#f97316" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="rkt-flame-inner" x1="13" y1="0" x2="13" y2="34" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#fef08a" />
+                <stop offset="55%" stopColor="#fbbf24" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M8 0 C5 10 2 24 13 52 C24 24 21 10 18 0 Z" fill="url(#rkt-flame-outer)" />
+            <path d="M10.5 0 C9 10 8 18 13 34 C18 18 17 10 15.5 0 Z" fill="url(#rkt-flame-inner)" />
+          </svg>
+        </motion.div>
+
+        {/* Exhaust smoke trail */}
+        <motion.div
+          style={{ position: "absolute", bottom: -68, left: "50%", x: "-50%", transformOrigin: "top center" }}
+          animate={{ opacity: [0.12, 0.28, 0.08, 0.22, 0.12], scaleX: [1, 1.25, 0.8, 1.15, 1] }}
+          transition={{ repeat: Infinity, duration: 0.45 }}
+        >
+          <svg width="18" height="56" viewBox="0 0 18 56" fill="none">
+            <defs>
+              <linearGradient id="rkt-smoke" x1="9" y1="0" x2="9" y2="56" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#94a3b8" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M6 0 C3 16 2 32 9 56 C16 32 15 16 12 0 Z" fill="url(#rkt-smoke)" />
+          </svg>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
 const formatCurrency = (value, currency = "XCD") => {
   try {
     return new Intl.NumberFormat("en-US", {
@@ -235,6 +334,7 @@ export default function OrbtronicsInvestorRelationsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      <RocketBackground />
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="flex justify-end mb-4">
